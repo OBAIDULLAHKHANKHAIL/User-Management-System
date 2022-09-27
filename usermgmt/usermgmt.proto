@@ -1,0 +1,59 @@
+/*
+///////////////////////////
+//        Terminal       //
+///////////////////////////
+
+go mod init example.com/go-usermgmt-grpc
+go get google.golang.org/grpc
+
+*/
+
+
+
+syntax = "proto3";
+
+
+package usermgmt;
+
+// Set name of New Folder you want to create to save *.pb.proto files 
+option go_package = "/pb;go_usermgmt_grpc";
+
+service UserManagement {
+  rpc CreateNewUser (NewUser) returns (User) {}
+}
+
+message NewUser {
+  string name = 1;
+  int32 age = 2;
+}
+
+message User {
+  string name = 1;
+  int32 age = 2;
+  int32 id = 3; 
+}
+
+
+
+/*
+///////////////////////////
+//        Terminal       //
+///////////////////////////
+
+// If you want to generate and save *.pb.go file in same folder 
+// where *.proto file is saved, then run the following command:
+
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. 
+       --go-grpc_opt=paths=source_relative usermgmt/usermgmt.proto 
+
+
+// If you want to generate and save *.pb.go in new folder 
+// which you had defined in "option go_package = "/pb;go_usermgmt_grpc";" 
+
+protoc --go_out=. --go_opt=paths=import --go-grpc_out=. 
+       --go-grpc_opt=paths=import usermgmt/usermgmt.proto
+
+*/
+
+
+
