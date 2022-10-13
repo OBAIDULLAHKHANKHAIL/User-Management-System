@@ -36,7 +36,18 @@ type UserManagementServer struct {
 }
 
 func (server *UserManagementServer) run() error {
-	
+	lis, err := net.Listen("tcp", port)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	s := grpc.NewServer()
+	pb.RegisterUserManagementServer(s, server)
+
+	// Server is listening on local host
+	log.Printf("server listening at %v", lis.Addr())
+
+	// return server
+	return s.Serve(lis)
 }
 
 //////////////////////////////////////////////////////////
@@ -49,25 +60,22 @@ func (server *UserManagementServer) run() error {
 func (s *UserManagementServer) CreateNewUser(ctx context.Context, in *pb.NewUser) (*pb.User, error) {
 	log.Printf("Received: %v", in.GetName())
 	var user_id int32 = int32(rand.Intn(100))
-	return &pb.User{Name: in.GetName(), Age: in.GetAge(), Id: user_id}, nil
+	created_user := &pb.User{Name: in.GetName(), Age: in.GetAge(), Id: user_id}
+	s.user_list.Users = append(s.user_list.Users, created_user)
+	return created_user, nil
+}
+
+func (s *UserManagementServer) GetUsers(ctx context.Context, in *pb.GetUsersParams) (*pb.UserList, error) {
+	return s.user_list, nil
 }
 
 func main() {
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	s := grpc.NewServer()
-	pb.RegisterUserManagementServer(s, &UserManagementServer{})
-
-	// Server is listening on local host
-	log.Printf("server listening at %v", lis.Addr())
-
-	// start server
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+	var user_mgmt_server *UserManagementServer = NewUserManagementServer()
+	if err := user_mgmt_server.run(); err != nil {
+		log.Fatalf("failed to server: %v", err)
 	}
 }
+// D:\Go Lang\User Management System\pb
 
 // func main(){
 // 	lis, err := net.Listen("tcp", port)

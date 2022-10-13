@@ -40,8 +40,14 @@ func main() {
 NAME: %s
 AGE: %d
 ID: %d`, r.GetName(), r.GetAge(), r.GetId())
-
 	}
+	params := &pb.GetUsersParams{}
+	r, err := c.GetUsers(ctx, params) 
+	if err != nil {
+		log.Fatalf("Could not retreve users: %v", err)
+	}
+	log.Print("\nUSER LIST: \n")
+	fmt.Printf("r.GetUsers(): %v\n", r.GetUsers())
 }
 
 
@@ -58,4 +64,3 @@ then in new terminal run usermgmt_client.go
 go run "d:\Go Lang\User Management System\usermgmt_client\usermgmt_client.go"
 
 */
-

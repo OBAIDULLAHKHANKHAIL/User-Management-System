@@ -4,7 +4,7 @@
 // - protoc             v3.21.6
 // source: usermgmt/usermgmt.proto
 
-package go_usermgmt_grpc
+package pb
 
 import (
 	context "context"
@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserManagementClient interface {
+	//rpc nameofrpc (request) return (response)
 	CreateNewUser(ctx context.Context, in *NewUser, opts ...grpc.CallOption) (*User, error)
 	GetUsers(ctx context.Context, in *GetUsersParams, opts ...grpc.CallOption) (*UserList, error)
 }
@@ -56,6 +57,7 @@ func (c *userManagementClient) GetUsers(ctx context.Context, in *GetUsersParams,
 // All implementations must embed UnimplementedUserManagementServer
 // for forward compatibility
 type UserManagementServer interface {
+	//rpc nameofrpc (request) return (response)
 	CreateNewUser(context.Context, *NewUser) (*User, error)
 	GetUsers(context.Context, *GetUsersParams) (*UserList, error)
 	mustEmbedUnimplementedUserManagementServer()

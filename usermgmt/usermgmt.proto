@@ -16,9 +16,16 @@ syntax = "proto3";
 package usermgmt;
 
 // Set name of New Folder you want to create to save *.pb.proto files 
-option go_package = "/pb;go_usermgmt_grpc";
+// option go_package = "/pb;go_usermgmt_grpc";
+// We use the option keyword to tell the Protocol Buffer Compiler 
+// where we want to put the generated stubs or interfaces.
+// for more: https://developers.google.com/protocol-buffers/docs/proto#options
+
+option go_package = "/pb";
+
 
 service UserManagement {
+  //rpc nameofrpc (request) return (response)
   rpc CreateNewUser (NewUser) returns (User) {}
   rpc GetUsers (GetUsersParams) returns (UserList) {}
 }
